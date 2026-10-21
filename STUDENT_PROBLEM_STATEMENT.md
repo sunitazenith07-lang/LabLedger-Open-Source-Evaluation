@@ -9,6 +9,7 @@ You are joining an existing small Python service. Improve the supplied code; do 
 
 ## Required behaviour
 1. Process payment events: payment_succeeded, payment_failed and refund_succeeded.
+   Payment state transitions are terminal: payment_succeeded and payment_failed only change a PENDING transaction. Later conflicting payment events must not silently reverse a terminal status; use reconciliation to surface disagreement.
 2. Process each event_id at most once. Replaying the same event must not change the result a second time.
 3. Store money in integer paise. Refunds must be positive and cumulative refunds must never exceed the original transaction amount.
 4. A refund may only be applied to a transaction whose payment succeeded. A failed or pending transaction must not become refunded because of a refund event.
