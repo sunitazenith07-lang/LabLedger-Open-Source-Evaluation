@@ -1,26 +1,9 @@
-"""Command-line preview for LabLedger."""
-from service import list_records, summary, filter_records
+"""Run a small offline demonstration of LabLedger."""
+from fixtures import sample_provider_records, sample_transactions
+from service import reconcile_transactions
 
-def main():
-    rows = list_records()
-    print("LabLedger — Student Starter")
-    print(f"Loaded {len(rows)} records")
-    for row in rows:
-        print(f"#{row.id} | {row.name} | {row.category} | {row.status}")
-    query = input("Search (Enter to skip): ").strip()
-    category = input("Category filter (Enter to skip): ").strip() or None
-    status = input("Status filter (Enter to skip): ").strip() or None
-    try:
-        results = filter_records(rows, query, category, status)
-    except ValueError as exc:
-        print(f"Invalid filter: {exc}")
-        return
-    if not results:
-        print("No records match your filters.")
-    else:
-        for row in results:
-            print(f"#{row.id} | {row.name} | {row.status}")
-    print("Summary:", summary(rows))
 
 if __name__ == "__main__":
-    main()
+    report = reconcile_transactions(sample_transactions(), sample_provider_records())
+    for category, transaction_ids in report.items():
+        print(f"{category}: {transaction_ids}")

@@ -1,17 +1,9 @@
-# Testing Notes
+# Test notes — LabLedger
 
-| Scenario | Setup/input | Expected | Actual | Result |
-|---|---|---|---|---|
-| 1 | | | | |
-| 2 | | | | |
-| 3 | | | | |
-| 4 | | | | |
-| 5 | | | | |
+For at least five meaningful scenarios, write:
 
-## Automated run
-- Command:
-- Total:
-- Passed:
-- Failed:
-- Errors:
-- Skipped:
+- Scenario:
+- Input:
+- Expected behaviour:
+- Actual behaviour:
+- Test or manual command used:

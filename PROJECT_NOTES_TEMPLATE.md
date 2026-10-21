@@ -1,11 +1,9 @@
-# Project Notes
+# Project notes — LabLedger
 
 ## Requirements completed
-
 ## Files changed
-
-## Decisions and assumptions
-
-## Tests and results
-
-## Limitations and next steps
+## Root causes found
+## Tests run and results
+## Design decisions and assumptions
+## Known limitations
+## What I would improve next

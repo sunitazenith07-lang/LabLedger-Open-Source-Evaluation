@@ -1,3 +1,8 @@
-# AI-Use Declaration
+# Academic integrity declaration
 
-For each tool/model or resource, record its purpose, what you accepted/modified/rejected, what you independently verified, and any displayed credits/tokens (or write “not available”). Never include secrets or private personal data.
+I confirm that the code, tests, documentation and pull-request explanation I submit for this evaluation are my own work. I did not use AI chatbots, AI code-completion or code-generation tools, nor did I ask another person to write or debug the assessment solution. I can explain each material change and demonstrate it live.
+
+Student name/ID: ____________________
+Repository URL: _____________________
+Pull request URL: ___________________
+Signature or confirmation: __________

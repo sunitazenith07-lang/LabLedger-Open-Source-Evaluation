@@ -1,16 +1,15 @@
-# Architecture Notes
+# Architecture notes — LabLedger
+
+Complete this file in your own words.
 
 ## Project map
-
-## Data model
+Describe what each relevant source file does.
 
 ## Data flow
+Explain what happens to a transaction from event input through validation and output.
 
-## Storage design
+## Key invariants
+Explain how duplicate events, refunds and reconciliation mismatches are handled.
 
-## Diagram
-
-## Three improvements suggested
-1.
-2.
-3.
+## Three improvements
+Describe three improvements grounded in the code you inspected.
