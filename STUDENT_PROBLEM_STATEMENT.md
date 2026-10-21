@@ -3,37 +3,38 @@
 **Track:** Fintech reliability | **Language:** Python 3.10+ | **Time:** 24-hour evaluation
 
 ## Scenario
-A fintech product receives payment events from a payment provider. Events can arrive late, more than once, or in a different order. Internal transaction records can also disagree with the provider's settlement report. Incorrect handling can show a failed payment as successful, credit the same payment twice, or mark a transaction refunded for more money than was paid.
+A fintech product receives payment events from a payment provider. Events can arrive late, more than once, or in a different order. Internal transaction records may also disagree with a provider's settlement report. Incorrect handling can show a failed payment as successful, credit the same payment twice, or refund more than was paid.
 
-You are joining an existing small Python service. Improve the existing code; do not replace the project with a new framework or an external API integration. All data is synthetic and the challenge runs offline.
+You are joining an existing small Python service. Improve the supplied code; do not replace it with a new framework or connect to external APIs. All data is synthetic and the challenge runs offline.
 
 ## Required behaviour
-1. **Process payment events.** Support payment_succeeded, payment_failed and refund_succeeded events. Keep transaction status consistent with the event and the rules below.
-2. **Idempotency.** Each event has an event_id. Processing the same event more than once must not change the result after its first successful processing.
-3. **Money safety.** Amounts are integer paise. Do not accept zero or negative refund amounts. The total refunded amount must never exceed the original transaction amount.
-4. **Valid transitions.** A refund can only be applied to a transaction whose payment succeeded. A failed or pending transaction must not become refunded because of a refund event.
-5. **Reconciliation.** Compare internal and provider records by transaction_id. Report records missing from either side, amount mismatches, and status mismatches. Results must be deterministic.
-6. **Explainability.** Keep functions small and add comments where a non-obvious financial rule is enforced.
+1. Process payment events: payment_succeeded, payment_failed and refund_succeeded.
+2. Process each event_id at most once. Replaying the same event must not change the result a second time.
+3. Store money in integer paise. Refunds must be positive and cumulative refunds must never exceed the original transaction amount.
+4. A refund may only be applied to a transaction whose payment succeeded. A failed or pending transaction must not become refunded because of a refund event.
+5. A partial refund must keep the transaction partially refunded. Mark it REFUNDED only when the full amount is refunded.
+6. Reconcile internal and provider records by transaction_id. Report records missing from either side, amount mismatches, and status mismatches separately. Sort report items deterministically.
+7. Handle unknown transaction IDs, invalid events, empty input and missing fields without corrupting state.
+8. Keep changes focused, with clear names and comments for non-obvious financial rules.
 
-## Record format
-An internal transaction is a dictionary with transaction_id, amount_paise, status, refunded_paise and processed_event_ids. Status is PENDING, SUCCEEDED, FAILED or REFUNDED. An event is a dictionary with event_id, transaction_id, type and, for refunds, amount_paise. Provider records contain transaction_id, amount_paise and status.
+## Setup
+Run: `python -m pip install -r requirements-dev.txt`, then `python -m pytest -q`, then `python -m main`.
 
-## Mandatory work
-- Read the source and run the existing tests before editing.
-- Reproduce and fix the defects described in the issue tickets announced at the evaluation kick-off. Organisers will release the ticket text at kick-off.
-- Make the required behaviour above correct and robust to missing fields, unknown transaction IDs, duplicate events, invalid amounts, empty lists and out-of-order events.
-- Add regression tests for the defects you fix.
-- Add a concise RECONCILIATION_NOTES.md with one example input/output, your key assumptions, and three edge cases you tested.
-- Submit a pull request containing your changes, tests run, root-cause explanation and limitations.
+## Work to submit
+- Read the source and run the starter tests before editing.
+- Use the required behaviour above as the acceptance contract. Investigate test failures, trace their root causes, and fix the underlying behaviour rather than hard-coding fixture results.
+- Add regression tests for defects you fix and document at least five edge cases in `TESTING.md`.
+- Submit one pull request against the original repository containing your changes and tests. Do not merge it.
+- Include `RECONCILIATION_NOTES.md` with one example input/output, key assumptions and three edge cases.
 
 ## Optional stretch work
-Choose at most one: (A) export a reconciliation report as CSV; (B) add a summary with counts by mismatch type; or (C) detect repeated provider references and report possible duplicate transactions. Stretch work is not required for a strong core score.
+Choose at most one after the required behaviour is correct: export a CSV report; add counts by mismatch type; or flag possible duplicate provider references for human review.
 
-## Test and CI instructions
-Run python -m pytest -q locally. The initial starter intentionally has failing tests. GitHub Actions runs on every push and pull-request update and reports the test outcome. Do not delete or weaken tests, edit the CI workflow to avoid failures, or hard-code the sample results. A failed check is not a submission blocker by itself; it is feedback about unfinished behaviour.
+## Testing and GitHub Actions
+Some visible tests are expected to fail on the untouched starter because key behaviours are incomplete. The test suite's exact initial counts can change as the repository is updated; no fixed count is promised. GitHub Actions runs on pushes and pull-request updates and publishes test counts. A red check before your fixes is expected; the goal is to make the visible tests pass without deleting, skipping, weakening or bypassing them. Do not edit the workflow to evade failures.
 
-## Integrity rules
-AI chatbots, AI code completion, generated patches and asking another person to write or debug the solution are not allowed. Work must be your own. You may use Python documentation and ordinary non-AI reference documentation. You will be asked to explain your changes and make a small live modification. A submission you cannot explain may receive no credit under the event rules.
+## Individual-work policy
+AI chatbots, AI coding assistants, generated patches/tests and asking another person to write or debug the solution are prohibited. Ordinary non-AI Python documentation is allowed. Do not upload challenge code or data to external services. You must explain your changes and make a small live modification if asked. Organisers may use a short code walkthrough; no automated detector can prove AI use.
 
 ## Evaluation — 100 marks
 - Understanding the code and data flow: 15
